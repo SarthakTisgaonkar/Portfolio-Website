@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarthak Tisgaonkar | Portfolio</title>
+    <meta name="description" content="Sarthak Tisgaonkar — AI & Data Science Engineer specializing in deep learning, embedded systems, and assistive technology. Based in Nashik, MH. Open to relocate.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lenis for Smooth Scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    
+    <!-- Three.js for Interactive WebGL Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #F4F3EF;
+            --text: #111111;
+            --accent: #0f766e;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-syne {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text);
+            transition: background-color 0.3s;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid rgba(17, 17, 17, 0.5);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+        .cursor-hover .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(17, 17, 17, 0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Lenis Smooth Scroll Setup */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
+        /* Animation Utilities */
+        .line-wrapper {
+            overflow: hidden;
+            padding-bottom: 0.1em;
+            margin-bottom: -0.1em;
+        }
+        .line-wrapper .line-inner {
+            display: block;
+            transform: translateY(110%);
+        }
+
+        /* Parallax Image Setup */
+        .parallax-container {
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+        .parallax-img {
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
+            transform: translateY(-10%);
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--text);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        #loader-counter {
+            position: absolute;
+            bottom: 3rem;
+            right: 3rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            opacity: 0.4;
+        }
+
+        /* Background Noise */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.04;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+        
+        .magnetic-btn {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Marquee / Ticker */
+        .marquee-container {
+            width: 100vw;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 2.5rem 0;
+            background: #0a0a0a;
+            color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 28s linear infinite;
+        }
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 3vw;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #d1d5db;
+            transition: color 0.3s;
+        }
+        .ticker-item:hover {
+            color: #5eead4;
+        }
+        .ticker-icon {
+            color: var(--accent);
+            margin-right: 1.5vw;
+            font-size: 1rem;
+        }
+
+        /* Project card hover */
+        .project-row .parallax-container {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease;
+        }
+        .project-row:hover .parallax-container {
+            transform: scale(1.02);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.25);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    </style>
+</head>
+<body class="selection:bg-teal-900 selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Noise Overlay -->
+    <div class="noise" aria-hidden="true"></div>
+
+    <!-- Initial Loader -->
+    <div id="loader" role="status" aria-label="Loading">
+        <div class="line-wrapper text-3xl font-syne font-bold overflow-hidden">
+            <span class="line-inner" id="loader-text">Loading Experience...</span>
+        </div>
+        <div id="loader-counter">00%</div>
+    </div>
+
+    <!-- Fixed Corner Navigation -->
+    <nav class="fixed top-0 left-0 w-full h-full pointer-events-none z-50 mix-blend-difference text-white" aria-label="Main navigation">
+        <div class="absolute top-8 left-6 md:top-10 md:left-10 text-xs font-bold tracking-[0.2em] uppercase pointer-events-auto hoverable">
+            <a href="#about" aria-label="Go to about section">ST. PORTFOLIO</a>
+        </div>
+        <div class="absolute top-8 right-6 md:top-10 md:right-10 text-xs font-bold tracking-[0.2em] uppercase text-right pointer-events-auto hoverable flex space-x-6">
+            <a href="#projects" class="hidden md:block">Work</a>
+            <a href="#experience" class="hidden md:block">Experience</a>
+            <a href="mailto:tisgaonkarsss@gmail.com">Contact</a>
+        </div>
+        <div class="absolute bottom-8 left-6 md:bottom-10 md:left-10 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase leading-relaxed text-slate-400">
+            AI & DATA SCIENCE ENGINEER <br/>
+            NASHIK, MH (OPEN TO RELOCATE)
+        </div>
+        <div class="absolute bottom-8 right-6 md:bottom-10 md:right-10 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase text-right leading-relaxed text-slate-400 pointer-events-auto hoverable">
+            <a href="#projects">SCROLL TO <br/> EXPLORE</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="h-screen relative overflow-hidden bg-[#0a0a0a] text-white flex items-center justify-center" aria-label="Hero">
+            <!-- WebGL Canvas Container -->
+            <div id="canvas-container" class="absolute inset-0 z-0 opacity-80 cursor-none" aria-hidden="true"></div>
+            
+            <!-- Center Typography -->
+            <div class="relative z-10 w-full flex flex-col items-center pointer-events-none mix-blend-difference text-white">
+                <p class="reveal-text text-sm md:text-lg font-bold tracking-[0.4em] uppercase text-teal-400 mb-6 md:mb-10">AI & Data Science Engineer</p>
+                <h1 class="font-syne font-extrabold uppercase tracking-tighter leading-[0.85] text-center w-full px-2 flex flex-col items-center overflow-hidden hero-heading">
+                    <span class="block text-[15.5vw] md:text-[10vw] mb-1 lg:mb-3 flex justify-center hero-word">SARTHAK</span>
+                    <span class="block text-[11vw] sm:text-[10.5vw] md:text-[8vw] lg:text-[7.5vw] flex justify-center hero-word">TISGAONKAR</span>
+                </h1>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none opacity-50">
+                <div class="w-px h-16 bg-white/40 scroll-line" style="transform-origin: top; animation: scrollLine 2s ease-in-out infinite;"></div>
+            </div>
+        </section>
+
+        <!-- Infinite Skill Ticker -->
+        <div class="marquee-container" aria-label="Skills ticker">
+            <div class="marquee-content">
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Artificial Intelligence</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Deep Learning</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Embedded Systems</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Signal Processing</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Data Science</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Robotics</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> System Architecture</span>
+                <!-- Duplicate for infinite loop -->
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Artificial Intelligence</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Deep Learning</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Embedded Systems</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Signal Processing</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Data Science</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> Robotics</span>
+                <span class="ticker-item"><span class="ticker-icon" aria-hidden="true">✦</span> System Architecture</span>
+            </div>
+        </div>
+
+        <!-- About Statement -->
+        <section id="about" class="py-32 px-6 md:px-12 flex justify-center items-center bg-white" aria-labelledby="about-heading">
+            <div class="max-w-5xl text-center">
+                <h2 id="about-heading" class="text-3xl md:text-5xl lg:text-7xl font-syne font-semibold leading-tight tracking-tight split-text-trigger">
+                    I thrive on problem-solving and innovation, designing self-balancing electric vehicles and developing AI-based cognitive assessment systems.
+                </h2>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 text-left w-full border-t border-slate-200 pt-16">
+                    <div class="reveal-up">
+                        <h3 class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-4">Education</h3>
+                        <p class="font-medium text-lg">B.Tech — AI & Data Science<br/><span class="text-teal-700">CGPA: 8.12</span></p>
+                        <p class="text-slate-500 mt-2">K.K. Wagh Institute of Engg. Education & Research</p>
+                    </div>
+                    <div class="reveal-up" style="transition-delay: 100ms;">
+                        <h3 class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-4">Milestone</h3>
+                        <p class="font-medium text-lg">Design Patent Granted<br/><span class="text-teal-700">No. 461404-001</span></p>
+                        <p class="text-slate-500 mt-2">Govt. of India. Self-balancing Segway at Dassault Systèmes.</p>
+                    </div>
+                    <div class="reveal-up" style="transition-delay: 200ms;">
+                        <h3 class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-4">Leadership</h3>
+                        <p class="font-medium text-lg">Vice Captain & Electronics Head</p>
+                        <p class="text-slate-500 mt-2">Team Nikola Racing. <span class="text-teal-700 font-semibold">AIR 1</span> in Design Report (2024/2025).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Selected Works / Projects -->
+        <section id="projects" class="py-32 px-6 md:px-12 bg-[#F4F3EF]" aria-labelledby="projects-heading">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-20 border-b border-black pb-8">
+                    <h2 id="projects-heading" class="text-6xl md:text-8xl font-bold font-syne uppercase tracking-tighter">Projects</h2>
+                    <p class="hidden md:block pb-4 font-medium uppercase tracking-widest text-sm">(2024 — 2025)</p>
+                </div>
+
+                <!-- Project 1: NeuroSense -->
+                <article class="project-row grid grid-cols-1 md:grid-cols-12 gap-10 mb-32 items-center">
+                    <div class="md:col-span-5 order-2 md:order-1">
+                        <p class="text-sm font-bold text-teal-800 tracking-widest uppercase mb-4">01. MedTech & AI</p>
+                        <h3 class="text-4xl md:text-5xl font-syne font-bold mb-6">NeuroSense</h3>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-md">
+                            A secure, quad-modal clinical assessment platform integrating React, Python Deep Learning, and ESP32 IoT. It evaluates neurodegenerative markers by replacing subjective observation with quantifiable digital biomarkers.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">Python ML</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">ESP32 IoT</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">React</span>
+                        </div>
+                    </div>
+                    <div class="md:col-span-7 order-1 md:order-2">
+                        <div class="parallax-container w-full h-[50vh] md:h-[70vh]">
+                            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=2000" alt="NeuroSense — MedTech AI platform visualization" class="parallax-img" loading="lazy">
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2: Exogenesis -->
+                <article class="project-row grid grid-cols-1 md:grid-cols-12 gap-10 mb-32 items-center">
+                    <div class="md:col-span-7">
+                        <div class="parallax-container w-full h-[50vh] md:h-[70vh]">
+                            <img src="https://images.unsplash.com/photo-1531746790731-6c08cd26362a?auto=format&fit=crop&q=80&w=2000" alt="Exogenesis — robotic teleoperation system" class="parallax-img" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="md:col-span-5 md:pl-10">
+                        <p class="text-sm font-bold text-teal-800 tracking-widest uppercase mb-4">02. Teleoperation</p>
+                        <h3 class="text-4xl md:text-5xl font-syne font-bold mb-6">Exogenesis</h3>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-md">
+                            A biometric-driven teleoperation system for hazardous environments. Integrates flex sensors with an ESP32-S3 controller to wirelessly transmit human motion (0.72ms latency) via ESP-NOW to a tendon-driven robotic hand.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">ESP32-S3</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">ESP-NOW</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">Embedded C</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3: Self-Balancing Segway -->
+                <article class="project-row grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                    <div class="md:col-span-5 order-2 md:order-1">
+                        <p class="text-sm font-bold text-teal-800 tracking-widest uppercase mb-4">03. Assistive Tech</p>
+                        <h3 class="text-4xl md:text-5xl font-syne font-bold mb-6">Self-Balancing Segway</h3>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-md">
+                            Developed a robust self-balancing electric Segway tailored for differently-abled individuals using advanced PID control algorithms. Secured an official Gov. of India Design Patent.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">MPU6050</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">PID Control</span>
+                            <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">Arduino</span>
+                        </div>
+                    </div>
+                    <div class="md:col-span-7 order-1 md:order-2">
+                        <div class="parallax-container w-full h-[50vh] md:h-[70vh]">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=2000" alt="Self-Balancing Segway — embedded systems on chip" class="parallax-img" loading="lazy">
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" class="py-32 px-6 md:px-12 bg-black text-white" aria-labelledby="experience-heading">
+            <div class="max-w-7xl mx-auto">
+                <h2 id="experience-heading" class="text-5xl md:text-7xl font-bold font-syne uppercase tracking-tighter mb-20 text-center text-white">Experience</h2>
+                
+                <div class="space-y-0 border-t border-white/20" role="list">
+                    
+                    <div class="experience-row py-10 border-b border-white/20 group hover:bg-white/5 transition-colors cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center hoverable" data-id="proworld" role="listitem" tabindex="0" aria-label="ProWorld Technologies - click for details">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-12 w-full md:w-2/3">
+                            <span class="text-sm font-bold tracking-widest uppercase text-teal-400 w-32 shrink-0">2025 — Pres.</span>
+                            <div>
+                                <h3 class="text-2xl md:text-4xl font-syne font-bold group-hover:translate-x-4 transition-transform duration-500">ProWorld Technologies</h3>
+                                <p class="text-slate-400 mt-2 font-medium">Project Engineer Intern</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 md:mt-0 w-full md:w-1/3 text-slate-300 text-sm md:text-base leading-relaxed text-left md:text-right flex items-center md:justify-end gap-4">
+                            <span>AI-based cognitive assessment & analytics systems for early neurological risk detection.</span>
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-teal-400 font-bold text-xl shrink-0" aria-hidden="true">→</span>
+                        </div>
+                    </div>
+
+                    <div class="experience-row py-10 border-b border-white/20 group hover:bg-white/5 transition-colors cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center hoverable" data-id="dassault" role="listitem" tabindex="0" aria-label="Dassault Systèmes - click for details">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-12 w-full md:w-2/3">
+                            <span class="text-sm font-bold tracking-widest uppercase text-teal-400 w-32 shrink-0">2024 — 2025</span>
+                            <div>
+                                <h3 class="text-2xl md:text-4xl font-syne font-bold group-hover:translate-x-4 transition-transform duration-500">Dassault Systèmes</h3>
+                                <p class="text-slate-400 mt-2 font-medium">Intern — Assistive Tech</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 md:mt-0 w-full md:w-1/3 text-slate-300 text-sm md:text-base leading-relaxed text-left md:text-right flex items-center md:justify-end gap-4">
+                            <span>Engineered a self-balancing Segway using embedded sensors and advanced control algorithms.</span>
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-teal-400 font-bold text-xl shrink-0" aria-hidden="true">→</span>
+                        </div>
+                    </div>
+
+                    <div class="experience-row py-10 border-b border-white/20 group hover:bg-white/5 transition-colors cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center hoverable" data-id="wrs" role="listitem" tabindex="0" aria-label="WRS Energy Solutions - click for details">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-12 w-full md:w-2/3">
+                            <span class="text-sm font-bold tracking-widest uppercase text-teal-400 w-32 shrink-0">Dec — Jan '25</span>
+                            <div>
+                                <h3 class="text-2xl md:text-4xl font-syne font-bold group-hover:translate-x-4 transition-transform duration-500">WRS Energy Solutions</h3>
+                                <p class="text-slate-400 mt-2 font-medium">Project Engineer</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 md:mt-0 w-full md:w-1/3 text-slate-300 text-sm md:text-base leading-relaxed text-left md:text-right flex items-center md:justify-end gap-4">
+                            <span>Solar project tracking utilizing data analysis and Business Intelligence tools (Power BI, SQL).</span>
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-teal-400 font-bold text-xl shrink-0" aria-hidden="true">→</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Leadership & Extra-Curricular -->
+        <section id="leadership" class="py-32 px-6 md:px-12 bg-white text-black" aria-labelledby="leadership-heading">
+            <div class="max-w-7xl mx-auto">
+                <h2 id="leadership-heading" class="text-5xl md:text-7xl font-bold font-syne uppercase tracking-tighter mb-20 text-center md:text-left">Beyond Code</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
+                    <div class="border-t border-black/10 pt-8 reveal-up">
+                        <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Speaking & Mentorship</p>
+                        <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">AICTE IDEA Lab Speaker</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">Conducted a comprehensive 6-day skilling program on the "Design of Electric Vehicle Two Wheeler." Delivered specialized sessions focusing on Vehicle Control Units (VCU) and core EV fundamentals.</p>
+                    </div>
+                    
+                    <div class="border-t border-black/10 pt-8 reveal-up" style="transition-delay: 100ms;">
+                        <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Event Leadership</p>
+                        <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">TEDx & Entrepreneurship</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">Actively serving as the EPM-Technical Member for TEDxKKWIEER and Co-Chairing the Entrepreneurship Vertical within the Executive Committee of Yi, KKWIEER.</p>
+                    </div>
+
+                    <div class="border-t border-black/10 pt-8 reveal-up">
+                        <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Motorsports</p>
+                        <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">Team Nikola Racing</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">Vice Captain and Electronics Head. Mentored and led the team to secure AIR 1 in the Design Report (2024 & 2025) and AIR 4 Overall at the national SAE-INDIA ETWDC competition.</p>
+                    </div>
+
+                    <div class="border-t border-black/10 pt-8 reveal-up" style="transition-delay: 100ms;">
+                        <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Community & Policy</p>
+                        <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">Institutional Service</h3>
+                        <p class="text-slate-600 leading-relaxed text-lg">Served 3 consecutive years as the Anti-Ragging Committee Representative. Volunteered for the Bureau of Indian Standards "Quality Connect" campaign and served as an Innovera Committee Member.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Contact CTA -->
+        <footer class="py-32 px-6 md:px-12 bg-[#F4F3EF] flex flex-col items-center justify-center text-center relative overflow-hidden" id="contact">
+            <p class="text-sm font-bold tracking-widest uppercase text-slate-500 mb-8 relative z-10">Got a project in mind?</p>
+            
+            <button id="open-contact-btn" class="hoverable inline-block relative z-50 pointer-events-auto" aria-label="Open contact form">
+                <h2 class="text-6xl md:text-[10vw] font-syne font-extrabold leading-none tracking-tighter hover:text-teal-800 transition-colors duration-500 magnetic-btn">
+                    LET'S CONNECT
+                </h2>
+            </button>
+            
+            <div class="mt-20 flex flex-col md:flex-row gap-6 md:gap-12 items-center text-sm font-bold uppercase tracking-widest relative z-10">
+                <a href="mailto:tisgaonkarsss@gmail.com" id="footer-email" class="hoverable pb-1 border-b border-black">tisgaonkarsss@gmail.com</a>
+                <a href="tel:+917666543356" id="footer-phone" class="hoverable pb-1 border-b border-black">+91 7666543356</a>
+                <a href="https://www.linkedin.com/in/sarthak-tisgaonkar-1261021b7" target="_blank" rel="noopener noreferrer" id="footer-linkedin" class="hoverable pb-1 border-b border-black">LinkedIn ↗</a>
+            </div>
+
+            <p class="mt-24 text-xs text-slate-400 font-medium tracking-widest">© 2026 SARTHAK TISGAONKAR. DESIGNED FOR EXCELLENCE.</p>
+        </footer>
+
+        <!-- ===== Contact Form Modal ===== -->
+        <div id="contact-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center pointer-events-none" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+            <div class="absolute inset-0 bg-[#0a0a0a]/90 backdrop-blur-xl modal-bg cursor-pointer pointer-events-auto opacity-0"></div>
+            
+            <div class="relative text-white w-full max-w-5xl max-h-[100vh] overflow-y-auto z-10 p-6 md:p-12 modal-content transform translate-y-10 opacity-0 pointer-events-auto flex flex-col md:flex-row gap-16">
+                
+                <button id="close-contact-modal" class="hoverable absolute top-6 right-6 md:top-12 md:right-12 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors z-20" aria-label="Close contact form">
+                    <svg width="16" height="16" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                
+                <!-- Left Info -->
+                <div class="w-full md:w-1/3 flex flex-col justify-between pt-12 md:pt-0">
+                    <div>
+                        <h3 id="contact-modal-title" class="text-4xl md:text-5xl font-syne font-bold mb-6">Let's build<br/>something<br/>great.</h3>
+                        <p class="text-slate-400 leading-relaxed mb-8">I'm currently looking for full-time opportunities and am open to relocation for the right role. Send me a message and I'll get back to you within 24 hours.</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase text-slate-500 mb-2">Contact Details</p>
+                            <a href="mailto:tisgaonkarsss@gmail.com" class="block hover:text-teal-400 transition-colors">tisgaonkarsss@gmail.com</a>
+                            <a href="tel:+917666543356" class="block hover:text-teal-400 transition-colors">+91 7666543356</a>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold tracking-widest uppercase text-slate-500 mb-2">Location / Status</p>
+                            <p class="text-white flex items-center">
+                                <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse mr-2"></span> Nashik, MH — Open to Relocate
+                            </p>
+                            <p class="text-white text-sm mt-1 opacity-80">Available for Full-Time Roles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Form -->
+                <div class="w-full md:w-2/3 md:pl-12 md:border-l border-white/10">
+                    <form id="contact-form" class="space-y-10" novalidate>
+                        <div class="group relative">
+                            <label for="contact-name" class="text-xs font-bold tracking-widest uppercase text-slate-500 mb-2 block transition-colors group-focus-within:text-teal-400">01. What's your name?</label>
+                            <input id="contact-name" type="text" name="name" required placeholder="John Doe *" class="w-full bg-transparent border-b border-white/30 text-white text-xl py-3 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-white/20">
+                        </div>
+
+                        <div class="group relative">
+                            <label for="contact-email" class="text-xs font-bold tracking-widest uppercase text-slate-500 mb-2 block transition-colors group-focus-within:text-teal-400">02. What's your email?</label>
+                            <input id="contact-email" type="email" name="email" required placeholder="john@company.com *" class="w-full bg-transparent border-b border-white/30 text-white text-xl py-3 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-white/20">
+                        </div>
+
+                        <div class="group relative">
+                            <label for="contact-message" class="text-xs font-bold tracking-widest uppercase text-slate-500 mb-2 block transition-colors group-focus-within:text-teal-400">03. Tell me about your project</label>
+                            <textarea id="contact-message" name="message" required rows="3" placeholder="Hello Sarthak, I'd like to talk about... *" class="w-full bg-transparent border-b border-white/30 text-white text-xl py-3 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-white/20 resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" id="form-submit-btn" class="hoverable w-full py-5 rounded-full border border-white text-white font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-colors">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===== Experience Details Modal ===== -->
+        <div id="experience-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center pointer-events-none" role="dialog" aria-modal="true" aria-labelledby="modal-company">
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-md modal-bg cursor-pointer pointer-events-auto opacity-0"></div>
+            
+            <div class="relative bg-[#F4F3EF] text-black w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl z-10 p-8 md:p-12 modal-content transform translate-y-10 opacity-0 pointer-events-auto">
+                <button id="close-modal" class="hoverable absolute top-6 right-6 w-10 h-10 rounded-full border border-black/20 flex items-center justify-center hover:bg-black hover:text-white transition-colors z-20" aria-label="Close experience details">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                
+                <div class="mb-8 pr-12">
+                    <span id="modal-date" class="text-sm font-bold tracking-widest uppercase text-teal-700"></span>
+                    <h2 id="modal-company" class="text-4xl md:text-5xl font-syne font-bold mt-2 mb-2"></h2>
+                    <h3 id="modal-role" class="text-xl text-slate-600 font-medium"></h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-200 pb-2">Overview</h4>
+                        <p id="modal-desc" class="text-slate-700 leading-relaxed mb-8 text-sm md:text-base"></p>
+                        
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-200 pb-2">Skills & Technologies</h4>
+                        <div id="modal-skills" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div class="w-full h-48 md:h-full min-h-[250px] rounded-xl overflow-hidden bg-slate-200 shadow-inner border border-black/5">
+                        <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+    // ============================================================
+    //  CUSTOM CURSOR
+    // ============================================================
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorOutline = document.getElementById('cursor-outline');
+
+    let mouseX = 0, mouseY = 0;
+    let outlineX = 0, outlineY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top  = `${mouseY}px`;
+    });
+
+    (function animateCursor() {
+        outlineX += (mouseX - outlineX) * 0.15;
+        outlineY += (mouseY - outlineY) * 0.15;
+        cursorOutline.style.left = `${outlineX}px`;
+        cursorOutline.style.top  = `${outlineY}px`;
+        requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('.hoverable, a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // ============================================================
+    //  MAGNETIC BUTTON
+    // ============================================================
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const r = btn.getBoundingClientRect();
+            btn.style.transform = `translate(${(e.clientX - r.left - r.width  / 2) * 0.25}px,
+                                              ${(e.clientY - r.top  - r.height / 2) * 0.4}px)`;
+        });
+        btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+    });
+
+    // ============================================================
+    //  LENIS SMOOTH SCROLL
+    // ============================================================
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+        smoothTouch: false,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // ============================================================
+    //  EXPERIENCE DATA
+    // ============================================================
+    const experienceData = {
+        proworld: {
+            company : 'ProWorld Technologies',
+            role    : 'Project Engineer Intern',
+            date    : 'Dec 2025 — Present',
+            desc    : 'Developing "NeuroSense", a quad-modal clinical assessment platform integrating React, Python Deep Learning, and ESP32 IoT. Evaluating neurodegenerative markers using IoT Tremor Kinematics, Spatial-Motor Vision ML, and Acoustic Dysarthria Evaluation to replace subjective observations with digital biomarkers.',
+            skills  : ['Deep Learning', 'Signal Processing', 'Computer Vision', 'React', 'ESP32'],
+            image   : 'https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=1000'
+        },
+        dassault: {
+            company : 'La Fondation Dassault Systèmes',
+            role    : 'Intern — Assistive Tech & Robotics',
+            date    : 'Mar 2024 — May 2025',
+            desc    : 'Developed a self-balancing Segway using embedded sensors and sophisticated control algorithms. Collaborated extensively across a multi-disciplinary team. Successfully filed and was granted a design patent (No. 461404-001, Govt. of India).',
+            skills  : ['PID Control', 'Embedded C', 'MPU6050', 'Arduino', '3DEXPERIENCE', 'SolidWorks'],
+            image   : 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1000'
+        },
+        wrs: {
+            company : 'WRS Energy Solutions LLP',
+            role    : 'Project Engineer',
+            date    : 'Dec 2024 — Jan 2025',
+            desc    : 'Assisted in comprehensive solar project tracking and documentation. Utilized data analysis and Business Intelligence tools to synthesize project insights, streamline reporting, and optimize renewable energy workflows.',
+            skills  : ['Python', 'Power BI', 'Excel', 'SQL', 'Data Visualization'],
+            image   : 'https://images.unsplash.com/photo-1509391366360-12009cbab440?auto=format&fit=crop&q=80&w=1000'
+        }
+    };
+
+    // ============================================================
+    //  EXPERIENCE MODAL
+    // ============================================================
+    const expModal    = document.getElementById('experience-modal');
+    const expModalBg  = expModal.querySelector('.modal-bg');
+    const expModalBox = expModal.querySelector('.modal-content');
+
+    const openExpModal = (id) => {
+        const d = experienceData[id];
+        if (!d) return;
+        document.getElementById('modal-company').textContent = d.company;
+        document.getElementById('modal-role').textContent    = d.role;
+        document.getElementById('modal-date').textContent    = d.date;
+        document.getElementById('modal-desc').textContent    = d.desc;
+        document.getElementById('modal-image').src           = d.image;
+        document.getElementById('modal-image').alt           = d.company;
+
+        const skillsEl = document.getElementById('modal-skills');
+        skillsEl.innerHTML = '';
+        d.skills.forEach(s => {
+            const span = document.createElement('span');
+            span.className = 'px-3 py-1 bg-white border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider text-slate-600 shadow-sm';
+            span.textContent = s;
+            skillsEl.appendChild(span);
+        });
+
+        expModal.classList.replace('hidden', 'flex');
+        lenis.stop();
+        gsap.to(expModalBg,  { opacity: 1, duration: 0.4, ease: 'power2.out' });
+        gsap.to(expModalBox, { opacity: 1, y: 0, duration: 0.5, delay: 0.1, ease: 'power3.out' });
+    };
+
+    const closeExpModal = () => {
+        gsap.to(expModalBox, { opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' });
+        gsap.to(expModalBg,  { opacity: 0, duration: 0.4, ease: 'power2.in',
+            onComplete: () => { expModal.classList.replace('flex', 'hidden'); lenis.start(); }
+        });
+    };
+
+    document.querySelectorAll('.experience-row').forEach(row => {
+        row.addEventListener('click', () => openExpModal(row.dataset.id));
+        row.addEventListener('keydown', (e) => { if (e.key === 'Enter') openExpModal(row.dataset.id); });
+    });
+    document.getElementById('close-modal').addEventListener('click', closeExpModal);
+    expModalBg.addEventListener('click', closeExpModal);
+
+    // ============================================================
+    //  CONTACT MODAL
+    // ============================================================
+    const ctModal    = document.getElementById('contact-modal');
+    const ctModalBg  = ctModal.querySelector('.modal-bg');
+    const ctModalBox = ctModal.querySelector('.modal-content');
+
+    const openCtModal = () => {
+        ctModal.classList.replace('hidden', 'flex');
+        lenis.stop();
+        gsap.to(ctModalBg,  { opacity: 1, duration: 0.4, ease: 'power2.out' });
+        gsap.to(ctModalBox, { opacity: 1, y: 0, duration: 0.5, delay: 0.1, ease: 'power3.out' });
+    };
+
+    const closeCtModal = () => {
+        gsap.to(ctModalBox, { opacity: 0, y: 20, duration: 0.3, ease: 'power2.in' });
+        gsap.to(ctModalBg,  { opacity: 0, duration: 0.4, ease: 'power2.in',
+            onComplete: () => { ctModal.classList.replace('flex', 'hidden'); lenis.start(); }
+        });
+    };
+
+    document.getElementById('open-contact-btn').addEventListener('click', openCtModal);
+    document.getElementById('close-contact-modal').addEventListener('click', closeCtModal);
+    ctModalBg.addEventListener('click', closeCtModal);
+
+    // ---- Escape key closes any open modal ----
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { closeExpModal(); closeCtModal(); }
+    });
+
+    // ============================================================
+    //  CONTACT FORM SUBMISSION
+    // ============================================================
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const btn  = document.getElementById('form-submit-btn');
+        const ENDPOINT = 'https://formspree.io/f/maqlklkz';
+
+        btn.textContent = 'SENDING...';
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        try {
+            const res = await fetch(ENDPOINT, {
+                method : 'POST',
+                body   : new FormData(form),
+                headers: { Accept: 'application/json' }
+            });
+            if (!res.ok) throw new Error('Network error');
+
+            form.innerHTML = `
+                <div class="flex flex-col items-center justify-center text-center py-10 min-h-[300px]">
+                    <div class="w-20 h-20 border-2 border-teal-400 rounded-full flex items-center justify-center mb-8">
+                        <svg class="w-10 h-10 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-3xl md:text-4xl font-syne font-bold text-white mb-4">Message Sent!</h4>
+                    <p class="text-slate-400 text-lg">Thanks for reaching out! I'll get back to you within 24 hours.</p>
+                </div>`;
+        } catch {
+            btn.textContent = 'ERROR — TRY AGAIN';
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    // ============================================================
+    //  TEXT SPLITTING UTILITY
+    // ============================================================
+    const splitTextIntoLines = (el) => {
+        const words = el.innerText.split(' ');
+        el.innerHTML = '';
+
+        let lineSpan = document.createElement('span');
+        lineSpan.className = 'line-inner';
+        let lineWrap = document.createElement('span');
+        lineWrap.className = 'line-wrapper block';
+        lineWrap.appendChild(lineSpan);
+        el.appendChild(lineWrap);
+
+        words.forEach(word => {
+            const prev = lineSpan.innerText;
+            lineSpan.innerText = prev + (prev ? ' ' : '') + word;
+            if (lineSpan.offsetHeight > parseInt(window.getComputedStyle(el).lineHeight)) {
+                lineSpan.innerText = prev;
+                lineSpan = document.createElement('span');
+                lineSpan.className = 'line-inner';
+                lineSpan.innerText = word;
+                lineWrap = document.createElement('span');
+                lineWrap.className = 'line-wrapper block';
+                lineWrap.appendChild(lineSpan);
+                el.appendChild(lineWrap);
+            }
+        });
+    };
+    document.querySelectorAll('.split-text-trigger').forEach(splitTextIntoLines);
+
+    // ============================================================
+    //  GSAP ANIMATIONS
+    // ============================================================
+    
+    // Split hero text into characters
+    document.querySelectorAll('.hero-word').forEach(el => {
+        const text = el.innerText;
+        el.innerHTML = '';
+        text.split('').forEach(char => {
+            const span = document.createElement('span');
+            span.className = 'hero-char inline-block opacity-0';
+            span.style.transform = 'translateY(110%) rotate(10deg)';
+            span.innerText = char;
+            el.appendChild(span);
+        });
+    });
+
+    // --- Loader + Hero reveal ---
+    let loaderPct = 0;
+    const counter = document.getElementById('loader-counter');
+    const countUp = setInterval(() => {
+        loaderPct = Math.min(loaderPct + Math.floor(Math.random() * 12) + 3, 99);
+        counter.textContent = String(loaderPct).padStart(2, '0') + '%';
+    }, 80);
+
+    gsap.timeline()
+        .to('#loader-text', { y: 0, duration: 1, ease: 'power4.out', delay: 0.2 })
+        .to('#loader-text', { y: '-110%', duration: 0.8, ease: 'power4.in', delay: 0.5 })
+        .to('#loader', {
+            yPercent: -100, duration: 1.2, ease: 'power4.inOut',
+            onStart: () => { clearInterval(countUp); counter.textContent = '100%'; }
+        }, '-=0.3')
+        .to('.hero-char', { y: 0, rotation: 0, opacity: 1, stagger: 0.05, duration: 1.5, ease: 'power4.out' }, '-=0.5')
+        .fromTo('.reveal-text',
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'power2.out' }, '-=1');
+
+    // --- About section text ---
+    document.querySelectorAll('.split-text-trigger .line-inner').forEach((line, i) => {
+        gsap.to(line, {
+            scrollTrigger: { trigger: '.split-text-trigger', start: 'top 80%' },
+            y: 0, duration: 1.2, ease: 'power4.out', delay: i * 0.1
+        });
+    });
+
+    // --- Fade up ---
+    document.querySelectorAll('.reveal-up').forEach(el => {
+        gsap.fromTo(el, { opacity: 0, y: 40 }, {
+            scrollTrigger: { trigger: el, start: 'top 85%' },
+            opacity: 1, y: 0, duration: 1, ease: 'power3.out'
+        });
+    });
+
+    // --- Parallax images ---
+    document.querySelectorAll('.parallax-img').forEach(img => {
+        gsap.to(img, {
+            scrollTrigger: {
+                trigger: img.parentElement,
+                start: 'top bottom', end: 'bottom top', scrub: true
+            },
+            y: '10%', ease: 'none'
+        });
+    });
+
+    // --- Experience rows ---
+    document.querySelectorAll('.experience-row').forEach(row => {
+        gsap.fromTo(row, { opacity: 0, x: -20 }, {
+            scrollTrigger: { trigger: row, start: 'top 90%' },
+            opacity: 1, x: 0, duration: 1, ease: 'power3.out'
+        });
+    });
+
+    // ============================================================
+    //  WEBGL — THREE.JS INTERACTIVE BACKGROUND
+    // ============================================================
+    const initWebGL = () => {
+        const container = document.getElementById('canvas-container');
+        if (!container) return;
+
+        const scene    = new THREE.Scene();
+        scene.fog      = new THREE.FogExp2(0x000000, 0.0015);
+        const camera   = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 3000);
+        camera.position.z = 1000;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setPixelRatio(devicePixelRatio);
+        renderer.setSize(innerWidth, innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const COLS = 50, ROWS = 50, COUNT = COLS * ROWS;
+        const positions = new Float32Array(COUNT * 3);
+        const scales    = new Float32Array(COUNT);
+
+        for (let ix = 0, i = 0, j = 0; ix < COLS; ix++) {
+            for (let iy = 0; iy < ROWS; iy++, i += 3, j++) {
+                positions[i]     = ix * 100 - (COLS * 100) / 2;
+                positions[i + 1] = 0;
+                positions[i + 2] = iy * 100 - (ROWS * 100) / 2;
+                scales[j] = 1;
+            }
+        }
+
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geo.setAttribute('scale',    new THREE.BufferAttribute(scales, 1));
+
+        const mat = new THREE.ShaderMaterial({
+            uniforms   : { color: { value: new THREE.Color(0xffffff) } },
+            vertexShader: `
+                attribute float scale;
+                void main() {
+                    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
+                    gl_PointSize = scale * (300.0 / -mvPos.z);
+                    gl_Position  = projectionMatrix * mvPos;
+                }`,
+            fragmentShader: `
+                uniform vec3 color;
+                void main() {
+                    if (length(gl_PointCoord - vec2(0.5)) > 0.475) discard;
+                    gl_FragColor = vec4(color, 0.5);
+                }`,
+            transparent : true,
+            depthTest   : false,
+            blending    : THREE.AdditiveBlending
+        });
+
+        const points = new THREE.Points(geo, mat);
+        scene.add(points);
+
+        let mx = 0, my = 0, t = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mx = e.clientX - innerWidth  / 2;
+            my = e.clientY - innerHeight / 2;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+        });
+
+        (function animate() {
+            requestAnimationFrame(animate);
+
+            camera.position.x += (mx - camera.position.x) * 0.05;
+            camera.position.y += (-my - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            const pos = points.geometry.attributes.position.array;
+            const sc  = points.geometry.attributes.scale.array;
+
+            for (let ix = 0, i = 0, j = 0; ix < COLS; ix++) {
+                for (let iy = 0; iy < ROWS; iy++, i += 3, j++) {
+                    pos[i + 1] = (Math.sin((ix + t) * 0.3) * 50) + (Math.sin((iy + t) * 0.5) * 50);
+                    sc[j]      = (Math.sin((ix + t) * 0.3) + 1) * 8 + (Math.sin((iy + t) * 0.5) + 1) * 8;
+                }
+            }
+            points.geometry.attributes.position.needsUpdate = true;
+            points.geometry.attributes.scale.needsUpdate    = true;
+
+            renderer.render(scene, camera);
+            t += 0.05;
+        })();
+    };
+
+    setTimeout(initWebGL, 500);
+    </script>
+</body>
+</html>
