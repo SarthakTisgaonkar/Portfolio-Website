@@ -195,6 +195,10 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        
+        /* Hide scrollbar for carousels */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="selection:bg-teal-900 selection:text-white">
@@ -318,15 +322,33 @@
                         <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-md">
                             A secure, quad-modal clinical assessment platform integrating React, Python Deep Learning, and ESP32 IoT. It evaluates neurodegenerative markers by replacing subjective observation with quantifiable digital biomarkers.
                         </p>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-2 mb-8">
                             <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">Python ML</span>
                             <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">ESP32 IoT</span>
                             <span class="px-4 py-2 border border-slate-300 rounded-full text-xs font-bold uppercase tracking-wider">React</span>
                         </div>
+                        <a href="./assets/NeuroSense/NeuroSense_Technical_Specification_one-pager.pdf" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-teal-800 text-white rounded-full text-sm font-bold uppercase tracking-wider hover:bg-teal-900 transition-colors hoverable group">
+                            View Detailed Report 
+                            <span class="group-hover:translate-x-1 transition-transform">→</span>
+                        </a>
                     </div>
                     <div class="md:col-span-7 order-1 md:order-2">
-                        <div class="parallax-container w-full h-[50vh] md:h-[70vh]">
-                            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&q=80&w=2000" alt="NeuroSense — MedTech AI platform visualization" class="parallax-img" loading="lazy">
+                        <div class="relative w-full h-[50vh] md:h-[70vh] rounded-2xl overflow-hidden group parallax-container">
+                            <!-- Carousel Slider -->
+                            <div class="flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" id="neurosense-carousel">
+                                <!-- Image 1 - Sensor Kit -->
+                                <img src="./assets/NeuroSense/sensor_set.jpeg" alt="NeuroSense Combined Sensor Kit" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <!-- Image 2 - QR Code -->
+                                <img src="./assets/NeuroSense/QR_to_website.png" alt="NeuroSense QR Code" class="w-full h-full object-contain bg-white shrink-0 snap-center" loading="lazy">
+                                <!-- Image 3 - Certificate -->
+                                <img src="./assets/NeuroSense/Doctors_signed_validation_document.jpeg" alt="NeuroSense Clinical Observation Certificate" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                            </div>
+
+                            <!-- Carousel Controls -->
+                            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="const c = document.getElementById('neurosense-carousel'); c.scrollBy({ left: -c.clientWidth, behavior: 'smooth' });" class="hoverable w-12 h-12 rounded-full bg-black/60 text-white backdrop-blur-md flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20" aria-label="Previous image">←</button>
+                                <button onclick="const c = document.getElementById('neurosense-carousel'); c.scrollBy({ left: c.clientWidth, behavior: 'smooth' });" class="hoverable w-12 h-12 rounded-full bg-black/60 text-white backdrop-blur-md flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20" aria-label="Next image">→</button>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -334,8 +356,18 @@
                 <!-- Project 2: Exogenesis -->
                 <article class="project-row grid grid-cols-1 md:grid-cols-12 gap-10 mb-32 items-center">
                     <div class="md:col-span-7">
-                        <div class="parallax-container w-full h-[50vh] md:h-[70vh]">
-                            <img src="https://images.unsplash.com/photo-1531746790731-6c08cd26362a?auto=format&fit=crop&q=80&w=2000" alt="Exogenesis — robotic teleoperation system" class="parallax-img" loading="lazy">
+                        <div class="relative w-full h-[50vh] md:h-[70vh] rounded-2xl overflow-hidden group parallax-container">
+                            <!-- Carousel Slider -->
+                            <div class="flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" id="exogenesis-carousel">
+                                <img src="./assets/Exogenesis/photoss_of_system.jpeg" alt="Exogenesis System Details" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Exogenesis/photo_with_guide.jpeg" alt="Exogenesis Team with Guide" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                            </div>
+
+                            <!-- Carousel Controls -->
+                            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="const c = document.getElementById('exogenesis-carousel'); c.scrollBy({ left: -c.clientWidth, behavior: 'smooth' });" class="hoverable w-12 h-12 rounded-full bg-black/60 text-white backdrop-blur-md flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20" aria-label="Previous image">←</button>
+                                <button onclick="const c = document.getElementById('exogenesis-carousel'); c.scrollBy({ left: c.clientWidth, behavior: 'smooth' });" class="hoverable w-12 h-12 rounded-full bg-black/60 text-white backdrop-blur-md flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20" aria-label="Next image">→</button>
+                            </div>
                         </div>
                     </div>
                     <div class="md:col-span-5 md:pl-10">
