@@ -475,13 +475,40 @@
                     <div class="border-t border-black/10 pt-8 reveal-up" style="transition-delay: 100ms;">
                         <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Event Leadership</p>
                         <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">TEDx & Entrepreneurship</h3>
-                        <p class="text-slate-600 leading-relaxed text-lg">Actively serving as the EPM-Technical Member for TEDxKKWIEER and Co-Chairing the Entrepreneurship Vertical within the Executive Committee of Yi, KKWIEER.</p>
+                        <p class="text-slate-600 leading-relaxed text-lg mb-6">Actively serving as the EPM-Technical Member for TEDxKKWIEER and Co-Chairing the Entrepreneurship Vertical within the Executive Committee of Yi, KKWIEER.</p>
+                        
+                        <div class="relative w-full h-64 rounded-xl overflow-hidden group">
+                            <div class="flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" id="tedx-carousel">
+                                <img src="./assets/Tedx/TedX.jpeg" alt="TEDx Event" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Tedx/ted1.jpeg" alt="TEDx Organizers" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Tedx/team.jpeg" alt="TEDx Team" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Tedx/Certificate.jpeg" alt="TEDx Certificate" class="w-full h-full object-contain bg-slate-100 shrink-0 snap-center" loading="lazy">
+                            </div>
+                            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="const c = document.getElementById('tedx-carousel'); c.scrollBy({ left: -c.clientWidth, behavior: 'smooth' });" class="hoverable w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20 text-xs" aria-label="Previous image">←</button>
+                                <button onclick="const c = document.getElementById('tedx-carousel'); c.scrollBy({ left: c.clientWidth, behavior: 'smooth' });" class="hoverable w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20 text-xs" aria-label="Next image">→</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="border-t border-black/10 pt-8 reveal-up">
                         <p class="text-xs font-bold tracking-widest uppercase text-teal-700 mb-3">Motorsports</p>
                         <h3 class="text-2xl md:text-3xl font-syne font-bold mb-4">Team Nikola Racing</h3>
-                        <p class="text-slate-600 leading-relaxed text-lg">Vice Captain and Electronics Head. Mentored and led the team to secure AIR 1 in the Design Report (2024 & 2025) and AIR 4 Overall at the national SAE-INDIA ETWDC competition.</p>
+                        <p class="text-slate-600 leading-relaxed text-lg mb-6">Vice Captain and Electronics Head. Mentored and led the team to secure AIR 1 in the Design Report (2024 & 2025) and AIR 4 Overall at the national SAE-INDIA ETWDC competition.</p>
+                        
+                        <div class="relative w-full h-64 rounded-xl overflow-hidden group">
+                            <div class="flex h-full w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" id="nikola-carousel">
+                                <img src="./assets/Team Nikola Racing/Winning Photograph.jpeg" alt="Team Nikola Racing Winning Moment" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Team Nikola Racing/Vehicle Photograph.jpeg" alt="Team Nikola Racing Vehicle" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Team Nikola Racing/Team Nikola Racing.jpeg" alt="Team Nikola Racing" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Team Nikola Racing/Team.jpeg" alt="Team Members" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                                <img src="./assets/Team Nikola Racing/vehicle.jpeg" alt="Vehicle Design" class="w-full h-full object-cover shrink-0 snap-center" loading="lazy">
+                            </div>
+                            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <button onclick="const c = document.getElementById('nikola-carousel'); c.scrollBy({ left: -c.clientWidth, behavior: 'smooth' });" class="hoverable w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20 text-xs" aria-label="Previous image">←</button>
+                                <button onclick="const c = document.getElementById('nikola-carousel'); c.scrollBy({ left: c.clientWidth, behavior: 'smooth' });" class="hoverable w-8 h-8 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center justify-center hover:bg-teal-600 transition-colors border border-white/20 text-xs" aria-label="Next image">→</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="border-t border-black/10 pt-8 reveal-up" style="transition-delay: 100ms;">
@@ -690,7 +717,7 @@
             date    : 'Dec 2024 — Jan 2025',
             desc    : 'Assisted in comprehensive solar project tracking and documentation. Utilized data analysis and Business Intelligence tools to synthesize project insights, streamline reporting, and optimize renewable energy workflows.',
             skills  : ['Python', 'Power BI', 'Excel', 'SQL', 'Data Visualization'],
-            image   : 'https://images.unsplash.com/photo-1509391366360-12009cbab440?auto=format&fit=crop&q=80&w=1000'
+            image   : './assets/WRS/WRS internship.jpeg'
         }
     };
 
